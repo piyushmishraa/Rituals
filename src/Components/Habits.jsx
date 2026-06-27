@@ -24,7 +24,7 @@ const normalizeHabits = (rawHabits) => {
                 ? habit.values
                     .map((entry) => ({
                         date: normalizeDateKey(entry?.date),
-                        count: entry?.count
+                        count: entry?.count > 0 ? 4 : 0
                     }))
                     .filter(isValidEntry)
                 : []
@@ -105,7 +105,7 @@ const HabitsProvider = ({ children }) => {
 
                 return {
                     ...habit,
-                    values: [...habit.values, { date: today, count: 1 }]
+                    values: [...habit.values, { date: today, count: 4 }]
                 };
             })
         );
