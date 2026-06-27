@@ -33,10 +33,15 @@
      padding: 0 28px;
  }
 
- .heatmap-block {
-     padding: 28px 0;
-     border-bottom: 1px solid #f0f0f0;
- }
+.heatmap-block {
+    padding: 28px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.heatmap-wrap {
+    width: 100%;
+    overflow: hidden;
+}
 
  .heatmap-block:last-child {
      border-bottom: none;

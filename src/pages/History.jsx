@@ -1,22 +1,34 @@
 import HeatMap from '@uiw/react-heat-map';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { HabitsContext } from '../Components/HabitsContext.jsx';
 import '../Components/History.css';
 
 const History = () => {
     const { habitsdata } = useContext(HabitsContext);
     const [heatMapWidth, setHeatMapWidth] = useState(850);
+    const heatmapWrapRef = useRef(null);
 
     useEffect(() => {
         const updateWidth = () => {
-            const available = window.innerWidth - 64;
-            setHeatMapWidth(Math.max(320, Math.min(850, available)));
+            const available = heatmapWrapRef.current?.clientWidth ?? window.innerWidth - 64;
+            setHeatMapWidth(Math.max(220, Math.min(850, available)));
         };
 
         updateWidth();
+        const resizeObserver = typeof ResizeObserver !== 'undefined'
+            ? new ResizeObserver(updateWidth)
+            : null;
+
+        if (resizeObserver && heatmapWrapRef.current) {
+            resizeObserver.observe(heatmapWrapRef.current);
+        }
+
         window.addEventListener('resize', updateWidth);
 
-        return () => window.removeEventListener('resize', updateWidth);
+        return () => {
+            window.removeEventListener('resize', updateWidth);
+            resizeObserver?.disconnect();
+        };
     }, []);
 
     const getStartDate = () => {
@@ -45,20 +57,22 @@ const History = () => {
                             <h3>{curr.name}</h3>
                             <span className="heatmap-period">Last 6 months</span>
                         </div>
-                        <HeatMap
-                            width={heatMapWidth}
-                            value={curr.values}
-                            weekLabels={['', 'Mon', '', 'Wed', '', 'Fri', '']}
-                            startDate={getStartDate()}
-                            endDate={new Date()}
-                            panelColors={{
-                                0: '#EBEDF0',
-                                1: '#D6D6D6',
-                                2: '#8C8C8C',
-                                3: '#404040',
-                                4: '#1a1a1a'
-                            }}
-                        />
+                        <div className="heatmap-wrap" ref={heatmapWrapRef}>
+                            <HeatMap
+                                width={heatMapWidth}
+                                value={curr.values}
+                                weekLabels={['', 'Mon', '', 'Wed', '', 'Fri', '']}
+                                startDate={getStartDate()}
+                                endDate={new Date()}
+                                panelColors={{
+                                    0: '#EBEDF0',
+                                    1: '#D6D6D6',
+                                    2: '#8C8C8C',
+                                    3: '#404040',
+                                    4: '#1a1a1a'
+                                }}
+                            />
+                        </div>
                     </div>
                 )) : <div className="empty-state">Add a habit to see your history heatmap.</div>}
             </div>
