@@ -69,11 +69,11 @@
 
 @media (max-width: 720px) {
     .heatmap-card {
-        padding: 0 16px;
+        padding: 0 12px;
     }
 
     .heatmap-block {
-        padding: 20px 0;
+        padding: 16px 0;
     }
 
     .heatmap-block-header {

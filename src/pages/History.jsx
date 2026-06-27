@@ -12,7 +12,7 @@ const History = () => {
     useEffect(() => {
         const updateWidth = () => {
             const available = heatmapWrapRef.current?.clientWidth ?? window.innerWidth - 64;
-            const minWidth = window.innerWidth <= 720 ? 760 : 220;
+            const minWidth = window.innerWidth <= 720 ? 620 : 220;
             setHeatMapWidth(Math.max(minWidth, Math.min(850, available)));
         };
 
