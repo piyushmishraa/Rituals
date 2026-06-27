@@ -1,6 +1,7 @@
 import HeatMap from '@uiw/react-heat-map';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { HabitsContext } from '../Components/HabitsContext.jsx';
+import { formatDateKey, parseDateKey } from '../Components/dateUtils.js';
 import '../Components/History.css';
 
 const History = () => {
@@ -11,7 +12,8 @@ const History = () => {
     useEffect(() => {
         const updateWidth = () => {
             const available = heatmapWrapRef.current?.clientWidth ?? window.innerWidth - 64;
-            setHeatMapWidth(Math.max(220, Math.min(850, available)));
+            const minWidth = window.innerWidth <= 720 ? 760 : 220;
+            setHeatMapWidth(Math.max(minWidth, Math.min(850, available)));
         };
 
         updateWidth();
@@ -36,6 +38,7 @@ const History = () => {
         d.setMonth(d.getMonth() - 6);
         return d;
     };
+    const getEndDate = () => parseDateKey(formatDateKey());
     return (
         <div className="page">
             <h1 className="page-title">History</h1>
@@ -63,7 +66,7 @@ const History = () => {
                                 value={curr.values}
                                 weekLabels={['', 'Mon', '', 'Wed', '', 'Fri', '']}
                                 startDate={getStartDate()}
-                                endDate={new Date()}
+                                endDate={getEndDate()}
                                 panelColors={{
                                     0: '#EBEDF0',
                                     1: '#D6D6D6',
