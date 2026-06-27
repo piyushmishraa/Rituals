@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import HabitCard from '../Components/HabitCard.jsx';
 import { HabitsContext } from '../Components/HabitsContext.jsx';
+import { formatDateKey, shiftDateKey } from '../Components/dateUtils.js';
 //  const tempArray = [{
 //     values: [{ date: '2016/01/11', count: 2 },
 //     { date: '2016/01/12', count: 20 },
@@ -48,7 +49,7 @@ const Home = () => {
         }
     }
 
-    const getTodayKey = () => new Date().toISOString().split('T')[0].replaceAll('-', '/');
+    const getTodayKey = () => formatDateKey();
 
     const isDoneToday = (habit) => {
         const today = getTodayKey();
@@ -75,23 +76,22 @@ const Home = () => {
         const dateData = ogHabit.values;
         const countByDate = {};
         dateData.forEach(entry => {
-            const key = new Date(entry.date).toDateString();
+            const key = entry.date;
             countByDate[key] = entry.count;
         });
 
         let currentStreak = 0;
-        let cursor = new Date();
+        let cursorKey = getTodayKey();
 
         while (true) {
-            const key = cursor.toDateString();
-            const count = countByDate[key] || 0;
+            const count = countByDate[cursorKey] || 0;
 
             if (count > 0) {
                 currentStreak++;
-                cursor.setDate(cursor.getDate() - 1);
+                cursorKey = shiftDateKey(cursorKey, -1);
             } else {
-                if (currentStreak === 0 && key === new Date().toDateString()) {
-                    cursor.setDate(cursor.getDate() - 1);
+                if (currentStreak === 0 && cursorKey === getTodayKey()) {
+                    cursorKey = shiftDateKey(cursorKey, -1);
                     continue;
                 }
                 break;

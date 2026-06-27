@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { HabitsContext } from './HabitsContext.jsx';
+import { formatDateKey, normalizeDateKey } from './dateUtils.js';
 
 const STORAGE_KEY = 'ritual-habits';
 
 const isValidEntry = (entry) =>
     entry &&
-    typeof entry.date === 'string' &&
+    normalizeDateKey(entry.date) &&
     typeof entry.count === 'number';
 
 const normalizeHabits = (rawHabits) => {
@@ -20,7 +21,12 @@ const normalizeHabits = (rawHabits) => {
         .map((habit) => ({
             name: habit.name.trim(),
             values: Array.isArray(habit.values)
-                ? habit.values.filter(isValidEntry)
+                ? habit.values
+                    .map((entry) => ({
+                        date: normalizeDateKey(entry?.date),
+                        count: entry?.count
+                    }))
+                    .filter(isValidEntry)
                 : []
         }))
         .filter((habit) => habit.name.length > 0)
@@ -84,7 +90,7 @@ const HabitsProvider = ({ children }) => {
     };
 
     const markHabitDone = (targetName) => {
-        const today = new Date().toISOString().split('T')[0].replaceAll('-', '/');
+        const today = formatDateKey();
 
         setHabitsdata((prevData) =>
             prevData.map((habit) => {

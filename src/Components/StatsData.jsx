@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { HabitsContext } from '../Components/HabitsContext.jsx';
+import { formatDateKey, parseDateKey, shiftDateKey } from './dateUtils.js';
 import './StatsData.css';
 
 const StatsData = ({ habitName }) => {
@@ -19,8 +20,8 @@ const StatsData = ({ habitName }) => {
     // completion rate logic (unchanged)
     const startingDateString = dateData[0].date;
     const lastDateString = dateData[dateData.length - 1].date;
-    const startingDt = new Date(startingDateString);
-    const lastDt = new Date(lastDateString);
+    const startingDt = parseDateKey(startingDateString);
+    const lastDt = parseDateKey(lastDateString);
     const totalDays = Math.max(
         Math.round((lastDt - startingDt) / (1000 * 60 * 60 * 24)) + 1,
         1
@@ -31,20 +32,19 @@ const StatsData = ({ habitName }) => {
     // current streak logic (unchanged)
     const countByDate = {};
     dateData.forEach(entry => {
-        const key = new Date(entry.date).toDateString();
+        const key = entry.date;
         countByDate[key] = entry.count;
     });
     let currentStreak = 0;
-    let cursor = new Date();
+    let cursorKey = formatDateKey();
     while (true) {
-        const key = cursor.toDateString();
-        const count = countByDate[key] || 0;
+        const count = countByDate[cursorKey] || 0;
         if (count > 0) {
             currentStreak++;
-            cursor.setDate(cursor.getDate() - 1);
+            cursorKey = shiftDateKey(cursorKey, -1);
         } else {
-            if (currentStreak === 0 && key === new Date().toDateString()) {
-                cursor.setDate(cursor.getDate() - 1);
+            if (currentStreak === 0 && cursorKey === formatDateKey()) {
+                cursorKey = shiftDateKey(cursorKey, -1);
                 continue;
             }
             break;
@@ -54,7 +54,7 @@ const StatsData = ({ habitName }) => {
     // best streak logic (unchanged)
     const sortedDates = [...dateData]
         .filter(e => e.count > 0)
-        .map(e => new Date(e.date))
+        .map(e => parseDateKey(e.date))
         .sort((a, b) => a - b);
     let bestStreak = sortedDates.length > 0 ? 1 : 0;
     let runningStreak = 1;
@@ -70,11 +70,11 @@ const StatsData = ({ habitName }) => {
 
     // ===== NEW: last 7 days data for bar chart =====
     const last7Days = [];
-    const dayCursor = new Date();
+    const dayCursor = parseDateKey(formatDateKey());
     for (let i = 6; i >= 0; i--) {
         const d = new Date(dayCursor);
         d.setDate(dayCursor.getDate() - i);
-        const key = d.toDateString();
+        const key = formatDateKey(d);
         const completed = (countByDate[key] || 0) > 0;
         last7Days.push({
             label: d.toLocaleDateString('en-US', { weekday: 'short' }),
