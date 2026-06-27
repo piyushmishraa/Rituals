@@ -63,10 +63,20 @@
 @media (max-width: 720px) {
     .heatmap-card {
         padding: 0 16px;
-        overflow-x: auto;
     }
 
     .heatmap-block {
-        min-width: 850px;
+        padding: 20px 0;
+    }
+
+    .heatmap-block-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        margin-bottom: 12px;
+    }
+
+    .heatmap-period {
+        font-size: 12px;
     }
 }
