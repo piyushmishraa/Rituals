@@ -1,0 +1,72 @@
+ .page-title {
+     font-size: 32px;
+     font-weight: 700;
+     margin: 0 0 8px;
+ }
+
+ .page-subtitle {
+     color: #999;
+     font-size: 15px;
+     margin: 0 0 24px;
+ }
+
+ .heatmap-legend {
+     display: flex;
+     align-items: center;
+     gap: 6px;
+     font-size: 13px;
+     color: #999;
+     margin-bottom: 24px;
+ }
+
+ .legend-swatch {
+     width: 14px;
+     height: 14px;
+     border-radius: 3px;
+     display: inline-block;
+ }
+
+ .heatmap-card {
+     background: #fff;
+     border: 1px solid #eee;
+     border-radius: 14px;
+     padding: 0 28px;
+ }
+
+ .heatmap-block {
+     padding: 28px 0;
+     border-bottom: 1px solid #f0f0f0;
+ }
+
+ .heatmap-block:last-child {
+     border-bottom: none;
+ }
+
+ .heatmap-block-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: baseline;
+     margin-bottom: 14px;
+ }
+
+ .heatmap-block-header h3 {
+     margin: 0;
+     font-size: 17px;
+     font-weight: 600;
+ }
+
+ .heatmap-period {
+     font-size: 13px;
+     color: #999;
+ }
+
+@media (max-width: 720px) {
+    .heatmap-card {
+        padding: 0 16px;
+        overflow-x: auto;
+    }
+
+    .heatmap-block {
+        min-width: 850px;
+    }
+}

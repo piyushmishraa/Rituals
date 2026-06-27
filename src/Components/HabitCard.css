@@ -1,0 +1,51 @@
+.habit-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 16px 20px;
+}
+
+.check-circle {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 8px;
+    border: 1.5px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.15s ease;
+}
+
+.check-circle:hover {
+    border-color: #aaa;
+}
+
+.check-circle.done {
+    background: #1D9E75;
+    border-color: #1D9E75;
+    color: #fff;
+}
+
+.habit-content {
+    flex: 1;
+}
+
+.habit-name {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.habit-streak {
+    font-size: 14px;
+    color: #999;
+    white-space: nowrap;
+}
